@@ -1,104 +1,190 @@
 # Backend - Trivia API
+Welcome to Udatrivia, the shiny new upgrade to Udacitrivia!
 
-## Setting up the Backend
+# Documentation
 
-### Install Dependencies
+This is a trivia quiz API that was created as part of a Udacity course to learn how to write, document, test and troubleshoot APIs. The trivia database contains a core set of questions, but through the API users can add or delete questions. Users can also search the questions for certain content. Users are also able to take a trivia quiz and can play games of up to five questions in a specified category or in all categories.
 
-1. **Python 3.7** - Follow instructions to install the latest version of python for your platform in the [python docs](https://docs.python.org/3/using/unix.html#getting-and-installing-the-latest-version-of-python)
+# Requirements and Installation
 
-2. **Virtual Environment** - We recommend working within a virtual environment whenever using Python for projects. This keeps your dependencies for each project separate and organized. Instructions for setting up a virual environment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
-
-3. **PIP Dependencies** - Once your virtual environment is setup and running, install the required dependencies by navigating to the `/backend` directory and running:
-
+- This API is written with Python 3.9.7. 
+- It is recommended that it is run in a virtual environment in order to encapsulate the necessary requirements. Instructions for setting up a virual environment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
+- Once the virtual environment is running, navigate to the '/backend' folder and use pip to install the additional required packages from requirements.txt:
 ```bash
 pip install -r requirements.txt
 ```
-
-#### Key Pip Dependencies
-
-- [Flask](http://flask.pocoo.org/) is a lightweight backend microservices framework. Flask is required to handle requests and responses.
-
-- [SQLAlchemy](https://www.sqlalchemy.org/) is the Python SQL toolkit and ORM we'll use to handle the lightweight SQL database. You'll primarily work in `app.py`and can reference `models.py`.
-
-- [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/#) is the extension we'll use to handle cross-origin requests from our frontend server.
-
-### Set up the Database
-
-With Postgres running, create a `trivia` database:
-
+- Set Up the Database
+  - With Postgres running, create a 'trivia' database:
 ```bash
 createdb trivia
 ```
-
-Populate the database using the `trivia.psql` file provided. From the `backend` folder in terminal run:
-
+  - Populate the database using the 'trivia.psql' file provided. From the 'backend' folder in terminal run:
 ```bash
 psql trivia < trivia.psql
 ```
 
-### Run the Server
+# Endpoint Details:
 
-From within the `./src` directory first ensure you are working using your created virtual environment.
+`GET '/categories'`
 
-To run the server, execute:
+Returns a dictionary of categories with keys of 'id' and a value which is a string of the category name.
 
-```bash
-flask run --reload
-```
+Request Arguments: None
 
-The `--reload` flag will detect file changes and restart the server automatically.
+Returns: An object with the key of 'categories', which contains id:category_string key:value pairs; a 'success' boolean; and the total number of categories returned as 'total_categories'.
 
-## To Do Tasks
-
-These are the files you'd want to edit in the backend:
-
-1. `backend/flaskr/__init__.py`
-2. `backend/test_flaskr.py`
-
-One note before you delve into your tasks: for each endpoint, you are expected to define the endpoint and response data. The frontend will be a plentiful resource because it is set up to expect certain endpoints and response data formats already. You should feel free to specify endpoints in your own way; if you do so, make sure to update the frontend or you will get some unexpected behavior.
-
-1. Use Flask-CORS to enable cross-domain requests and set response headers.
-2. Create an endpoint to handle `GET` requests for questions, including pagination (every 10 questions). This endpoint should return a list of questions, number of total questions, current category, categories.
-3. Create an endpoint to handle `GET` requests for all available categories.
-4. Create an endpoint to `DELETE` a question using a question `ID`.
-5. Create an endpoint to `POST` a new question, which will require the question and answer text, category, and difficulty score.
-6. Create a `POST` endpoint to get questions based on category.
-7. Create a `POST` endpoint to get questions based on a search term. It should return any questions for whom the search term is a substring of the question.
-8. Create a `POST` endpoint to get questions to play the quiz. This endpoint should take a category and previous question parameters and return a random questions within the given category, if provided, and that is not one of the previous questions.
-9. Create error handlers for all expected errors including 400, 404, 422, and 500.
-
-## Documenting your Endpoints
-
-You will need to provide detailed documentation of your API endpoints including the URL, request parameters, and the response body. Use the example below as a reference.
-
-### Documentation Example
-
-`GET '/api/v1.0/categories'`
-
-- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
-- Request Arguments: None
-- Returns: An object with a single key, `categories`, that contains an object of `id: category_string` key: value pairs.
-
-```json
+Ex: curl -X GET http://127.0.0.1:5000/categories
 {
-  "1": "Science",
-  "2": "Art",
-  "3": "Geography",
-  "4": "History",
-  "5": "Entertainment",
-  "6": "Sports"
+  "categories":{
+    "1":"Science",
+    "2":"Art",
+    "3":"Geography",
+    "4":"History",
+    "5":"Entertainment",
+    "6":"Sports"},
+  "success":true,
+  "total_categories":6
 }
-```
 
-## Testing
 
-Write at least one test for the success and at least one error behavior of each endpoint using the unittest library.
+`GET '/questions'`
+`GET '/questions?page=<int:page_number>'`
 
-To deploy the tests, run
+Returns a dictionary of information including a dictionary of all categories; the current category; a list of the questions; a 'success' boolean; and the total number of questions.
 
-```bash
-dropdb trivia_test
-createdb trivia_test
-psql trivia_test < trivia.psql
-python test_flaskr.py
-```
+Request Arguments: No required arguments; 
+  optional 'page_number' as an integer
+
+Returns: An object with various key:value pairs:  'categories' with the value of a dictionary of the categories as dictionaries including 'id' and 'type'; a 'current_category' key which is always null in this case; a 'questions' key, which has a value of a dictionary of questions from all categories - with each question represented as a dictionary with keys of 'id', 'question', 'answer', 'category' and 'difficulty'; a success boolean; and the number of questions returned as 'total_questions'.
+
+Ex: curl -X GET http://127.0.0.1:5000/questions
+{
+  "categories":[
+    {"id":1,"type":"Science"},
+    {"id":2,"type":"Art"},
+    {"id":3,"type":"Geography"},
+    {"id":4,"type":"History"},
+    {"id":5,"type":"Entertainment"},
+    {"id":6,"type":"Sports"}],
+  "current_category":null,
+  "questions":[
+    {"answer":"Maya Angelou","category":4,"difficulty":2,"id":5,"question":"Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"},
+    {"answer":"Muhammad Ali","category":4,"difficulty":1,"id":9,"question":"What boxer's original name is Cassius Clay?"},
+    {"answer":"Apollo 13","category":5,"difficulty":4,"id":2,"question":"What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"},
+    <etc, cut short for example>],
+  "success":true,
+  "total_questions":19
+}
+
+
+`DELETE '/questions/<int:question_id>'`
+
+This endpoint deletes the question with the specified id.
+
+Request Arguments: 'id' as an integer
+
+Returns: A dictionary of the following information in the form of key:value pairs: 'deleted' which is the id of the successfully deleted question; a dictionary of the questions with each question represented as a dictionary with keys of 'id', 'question', 'answer', 'category' and 'difficulty'; a 'success' boolean; and the new total number of questions as 'total_questions'.
+
+Ex: curl -X DELETE http://127.0.0.1:5000/questions/24
+{
+  "deleted":24,
+  "questions":[
+    {"answer":"Maya Angelou","category":4,"difficulty":2,"id":5,"question":"Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"},
+    {"answer":"Muhammad Ali","category":4,"difficulty":1,"id":9,"question":"What boxer's original name is Cassius Clay?"},
+    {"answer":"Apollo 13","category":5,"difficulty":4,"id":2,"question":"What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"},
+    <etc, cut short for example>],
+  "success":true,
+  "total_questions":19}
+
+
+`POST '/questions'`
+
+This endpoint adds a new question to the trivia database with the informtion for the question, answer, caetegory, and difficulty provided by the user and an id generated by the database.
+
+Request Arguments: "question" as a string, 
+  "answer" as a string, 
+  "category" as a string, 
+  "difficulty" as an integer
+
+Returns: A dictionary of the following information in the form of key:value pairs: 'created' which is the id of the successfully created question; a dictionary of the questions with each question represented as a dictionary with keys of 'id', 'question', 'answer', 'category' and 'difficulty'; a 'success' boolean; and the new total number of questions as 'total_questions'.
+
+Ex: curl -X POST http://127.0.0.1:5000/questions -H "Content-Type:application/json" -d '{"question":"what is 1+1?", "answer":"2", "difficulty": 1, "category":1}'
+{
+  "created":24,
+  "questions":[
+    {"answer":"Maya Angelou","category":4,"difficulty":2,"id":5,"question":"Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"},
+    {"answer":"Muhammad Ali","category":4,"difficulty":1,"id":9,"question":"What boxer's original name is Cassius Clay?"},
+    {"answer":"Apollo 13","category":5,"difficulty":4,"id":2,"question":"What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"},
+    <etc, cut short for example>],
+  "success":true,
+  "total_questions":20
+}
+
+
+`POST '/questions/search'`
+
+Returns a list of the questions that match the user-input search term. Searching is done based on the words in the 'question' only, terms in the 'answer' are not searched.
+
+Request Arguments: 'search' as a string
+
+Returns: A dictionary including the following information in the form of key:value pairs: the 'questions' key, which is a list of dictionaries containing information about the questions - the 'question', 'answer', 'category', 'difficulty, and 'id' - which include the search term in the 'question'; a 'success' boolean; and the number of questions returned as 'total_questions'.
+
+Ex:curl -X POST http://127.0.0.1:5000/questions/search -H "Content-Type:application/json" -d '{"search":"butter"}'
+{
+  "questions":[
+    {"answer":"George Washington Carver","category":4,"difficulty":2,"id":12,"question":"Who invented Peanut Butter?"}],
+  "success":true,
+  "total_questions":1
+}
+
+
+`GET '/categories/<int:category_id>/questions'`
+
+Returns a list of the questions in a specified category.
+
+Request Arguments: 'category_id' as an integer
+
+Returns: A dictionary with the following information in the form of key:value pairs: 'questions' which is a list of dictionaries containing the 'question', 'answer', 'category', 'difficulty' and 'id' of each question in the specified category; a success boolean; and the number of questions returned as 'total_questions'.
+
+Ex:curl -X GET http://127.0.0.1:5000/categories/1/questions
+{
+  "questions":[
+    {"answer":"The Liver","category":1,"difficulty":4,"id":20,"question":"What is the heaviest organ in the human body?"},
+    {"answer":"Alexander Fleming","category":1,"difficulty":3,"id":21,"question":"Who discovered penicillin?"},
+    {"answer":"Blood","category":1,"difficulty":4,"id":22,"question":"Hematology is a branch of medicine involving the study of what?"}],
+  "success":true,
+  "total_questions":3
+}
+
+
+`POST '/quizzes'`
+
+Allows the user to play the trivia game with questions randomly selected from a given category. If no category is provided, the questions will be randomly pulled from all categories.
+
+Request Arguments: 'previous_questions' as a list of question ids (as integers) which have already been asked, optional 'quiz_category' as an integer 
+
+Returns: A dictionary containing a 'success' boolean and a 'question' containing a dictionary of the formatted question information including the 'question', 'answer', 'category', 'difficulty' and 'id'.
+
+Ex: curl -X POST http://127.0.0.1:5000/quizzes -H 'Content-Type: application/json' -d '{"previous_questions":[2], "quiz_category":{"type":"Science","id":1}}'
+{
+  "question":{
+    "answer":"Blood","category":1,"difficulty":4,"id":22,"question":"Hematology is a branch of medicine involving the study of what?"},
+  "success":true
+  }
+
+
+# Error Handling
+
+Errors are returned as JSON objects in the following format:
+{
+    "success": False, 
+    "error": 400,
+    "message": "Bad request"
+}
+
+The API will return five error types when requests fail:
+400: Bad Request
+404: Resource not found
+405: Method not allowed
+422: Not able to be processed
+500: Server error

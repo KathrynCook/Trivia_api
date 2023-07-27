@@ -1,4 +1,5 @@
 .quiz-play-holder {
+    background-color: #e4ebce;
     width: 80%;
     margin-left: 10%;
     text-align: center;
@@ -16,16 +17,18 @@
 }
 
 .play-category:hover {
-    color: dodgerblue;
+    cursor: pointer;
+    color: #4E9F3D;
 }
 
 .button {
     width: 100px;
     margin-top: 5px;
-    background-color: dodgerblue;
-    color: white;
+    background-color: #4E9F3D;
+    color: #D8E9A8;
     padding: 3px 5px;
     align-self: center;
+    cursor: pointer;
 }
 
 div.button {
@@ -39,9 +42,9 @@ div.button {
 }
 
 .correct {
-    color: green;
+    color: #12ba12;
 }
 
 .wrong {
-    color: red;
+    color: #e71616;
 }

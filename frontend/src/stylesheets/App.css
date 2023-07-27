@@ -1,6 +1,6 @@
 .App-header {
-  background-color: #222;
-  color: white;
+  background-color: #191A19;
+  color: #4E9F3D;
   display: flex;
   justify-content: space-between;
   height: 75px;
@@ -10,7 +10,7 @@
 }
 
 .App-header > h1 {
-  color: dodgerblue;
+  color: #39FF14;
 }
 
 .App-intro {
@@ -24,11 +24,13 @@ h2 {
 li {
   text-align: center;
   margin: 5px 0px;
+  cursor: pointer;
 }
 
 ul {
   list-style-type: none;
   padding-inline-start: 0px;
+  cursor: pointer;
 }
 
 form {
